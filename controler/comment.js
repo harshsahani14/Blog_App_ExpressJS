@@ -34,3 +34,30 @@ exports.createComment = async (req,res)=>{
 
     }
 }
+
+exports.getComments = async (req,res)=>{
+
+    try{
+    
+        const id = req.params.id;
+        
+        const post = await Post.findById({_id:id});
+
+
+        res.status(200).json({
+            sucess:true,
+            data:post.comments,
+            message:"Comments fetched sucessfuly"
+        })
+
+    }
+    catch(e){
+
+        res.status(500).json({
+            sucess:false,
+            data:null,
+            message:e.message
+        })
+
+    }
+}
