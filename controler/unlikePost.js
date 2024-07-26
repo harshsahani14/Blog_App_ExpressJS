@@ -12,7 +12,7 @@ exports.unLikePost = async (req,res)=>{
        res.status(200).json({
             sucess:true,
             data:post,
-            message:"Post liked sucessfully"
+            message:"Post unliked sucessfully"
        })
     }
     catch(e){
