@@ -1,27 +1,34 @@
 const Post = require('../models/Post');
+const Comment = require('../models/Comment')
 
 exports.createComment = async (req,res)=>{
 
     try{
-       
-        const id = req.params.id;
-        const comment = req.body.comment;
-
-        const post = await Post.findById({_id:id});
-
-        const comments = post.comments;
-
-        comments.push(comment)
-
-        const upDatedPost = await Post.findByIdAndUpdate({_id:id},{comments}) 
         
-        res.status(200).json(
-            {
-                sucess:true,
-                data:upDatedPost,
-                message:"Comment added sucessfuly",
-            }
-        )
+    
+       const {post , body , user} = req.body;
+        
+    //    Creates a comment object
+       const comment = new Comment({
+            post : post,
+            body : body,
+            user : user
+       })
+
+    //    Save comment in db
+       const data = await comment.save()
+
+
+    //    Find the post and save the id of the comment in the comments array
+
+       const updatedPost = await Post.findByIdAndUpdate(post, { $push:{comments:data._id}  } , {new :true})
+                                 .populate("comments")//populate the comment array with actual objects instead of ids 
+
+       res.status(200).json({
+        sucess:true,
+        data:updatedPost,
+        message:"Comment saved in DB"
+    })
 
     }
     catch(e){

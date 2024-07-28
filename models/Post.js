@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const PostSchema = new mongoose.Schema(
+const postSchema = new mongoose.Schema(
     {
 
         title:{
@@ -11,15 +11,15 @@ const PostSchema = new mongoose.Schema(
             type:String,
             required:true,
         },
-        like:{
-            type:Boolean,
-            default:false,
-        },
-        comments:{
-            type:Array,
-            default:[]
-        }
+        likes:[{
+            type:mongoose.Schema.Types.ObjectId,
+            ref:'Like'
+        }],
+        comments:[{
+            type:mongoose.Schema.Types.ObjectId,
+            ref:'Comment'
+        }]
     }
 )
 
-module.exports = mongoose.model('Post',PostSchema);
+module.exports = mongoose.model('Post',postSchema);

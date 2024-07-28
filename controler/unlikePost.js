@@ -1,19 +1,21 @@
 const Post = require('../models/Post');
-
+const Like = require('../models/Like')
 exports.unLikePost = async (req,res)=>{
 
     try{
-       const id = req.params.id;
+       
+        const {post,like} = req.body;
 
-       const like = false;
+        const unLike = await Like.findByIdAndDelete({_id:like})
 
-       const post = await Post.findByIdAndUpdate({_id:id},{like});
+        const updatedPost = await Post.findByIdAndUpdate(post,{ $pull :{likes:like}} ,{new :true})
 
-       res.status(200).json({
+        res.status(200).json({
             sucess:true,
-            data:post,
+            data:updatedPost,
             message:"Post unliked sucessfully"
        })
+
     }
     catch(e){
 

@@ -1,9 +1,10 @@
 const Post = require('../models/Post');
 
+// Needs testing after liking routes are created
 exports.getPosts = async (req,res)=>{
 
     try{
-       const posts = await Post.find({});
+       const posts = await Post.find({}).populate("comments").populate("likes");
 
        res.status(200).json(
         {

@@ -1,17 +1,22 @@
 const Post = require('../models/Post');
-
+const Like = require('../models/Like')
 exports.likePost = async (req,res)=>{
 
     try{
-       const id = req.params.id;
+       
+        const {post,user} = req.body;
 
-       const like = true;
+        const like = new Like({
+            post,user
+        })
 
-       const post = await Post.findByIdAndUpdate({_id:id},{like});
+        const data = await like.save();
+
+        const likePost = await Post.findByIdAndUpdate(post,{ $push :{ likes:data._id} },{new : true})
 
        res.status(200).json({
             sucess:true,
-            data:post,
+            data:likePost,
             message:"Post liked sucessfully"
        })
     }
